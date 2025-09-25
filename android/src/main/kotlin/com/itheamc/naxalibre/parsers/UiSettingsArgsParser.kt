@@ -109,14 +109,12 @@ object UiSettingsArgsParser {
         )
     }
 
-    /**
-     * Parses a list of margins from an input object.
+        /**
+     * Parses margins from a generic object.
      *
-     * This function attempts to parse a list of four numerical margin values (top, right, bottom, left)
-     * from the given input object.
-     *
-     * @param margins The input object that potentially contains a list of margin values.
-     * It is expected to be a `List` of four elements. Each element should be convertible to a `Double`.
+     * This function attempts to extract margin values from a provided input. If the input is a List
+     * containing four elements, it tries to convert each element to a `Double` and returns a list of
+     * Double values representing the margins in the order: top, right, bottom, left.
      *
      * @return A `List<Double>` representing the parsed margin values (top, right, bottom, left) if:
      *   - The input `margins` is a `List`.
@@ -129,7 +127,10 @@ object UiSettingsArgsParser {
      */
     private fun parseMargins(margins: Any?): List<Int>? {
         return if (margins is List<*> && margins.size == 4) {
-            margins.map { it?.toString()?.toInt() ?: 0 }
+            margins.map { 
+                val doubleValue = it?.toString()?.toDoubleOrNull() ?: 0.0
+                doubleValue.toInt()
+            }
         } else null
     }
 
