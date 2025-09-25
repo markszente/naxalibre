@@ -343,32 +343,32 @@ abstract class NaxaLibreController {
   ///
   Future<void> resetNorth();
 
-  /// Converts a screen location (in pixels) to a geographic coordinate (latitude and longitude).
+  /// Converts a screen location (in logical pixels) to a geographic coordinate (latitude and longitude).
   ///
-  /// - [point]: The screen location as a [Point<double>].
+  /// - [point]: The screen location as a [Point<double>] in logical pixels.
   /// - Returns: A [Future] that resolves to a [LatLng] object representing the geographic
   ///   coordinate, or `null` if the conversion fails.
   Future<LatLng?> fromScreenLocation(Point<double> point);
 
-  /// Converts a screen locations (in pixels) to a geographic coordinates (latitude and longitude).
+  /// Converts a screen locations (in logical pixels) to a geographic coordinates (latitude and longitude).
   ///
-  /// - [points]: The list of screen location
+  /// - [points]: The list of screen locations in logical pixels.
   /// - Returns: A [Future] that resolves to a list of [LatLng] object representing the geographic
   ///   coordinates, or `null` if the conversion fails.
   Future<List<LatLng>?> fromScreenLocations(List<Point<double>> points);
 
-  /// Converts a geographic coordinate (latitude and longitude) to a screen location (in pixels).
+  /// Converts a geographic coordinate (latitude and longitude) to a screen location (in logical pixels).
   ///
   /// - [latLng]: The geographic coordinate as a [LatLng].
-  /// - Returns: A [Future] that resolves to a [Point<double>] representing the screen location,
-  ///   or `null` if the conversion fails.
+  /// - Returns: A [Future] that resolves to a [Point<double>] representing the screen location
+  ///   in logical pixels, or `null` if the conversion fails.
   Future<Point<double>?> toScreenLocation(LatLng latLng);
 
-  /// Converts a geographic coordinates (latitude and longitude) to a screen locations (in pixels).
+  /// Converts a geographic coordinates (latitude and longitude) to a screen locations (in logical pixels).
   ///
   /// - [list]: The list of  geographic coordinates.
-  /// - Returns: A [Future] that resolves to a list of screen point representing the screen locations,
-  ///   or `null` if the conversion fails.
+  /// - Returns: A [Future] that resolves to a list of screen point representing the screen locations
+  ///   in logical pixels, or `null` if the conversion fails.
   Future<List<Point<double>>?> toScreenLocations(List<LatLng> list);
 
   /// Converts projected meters (northing and easting) to a geographic coordinate (latitude and longitude).

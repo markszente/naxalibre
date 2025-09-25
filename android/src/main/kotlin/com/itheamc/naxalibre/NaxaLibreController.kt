@@ -165,15 +165,17 @@ class NaxaLibreController(
     /**
      * Converts a screen location to geographical coordinates.
      *
-     * @param point A list representing the x and y coordinates of the screen location.
+     * @param point A list representing the x and y coordinates of the screen location in logical pixels.
      * @return A list containing the latitude and longitude of the corresponding geographical location.
      */
     override fun fromScreenLocation(point: List<Double>): List<Double> {
+        val pixelRatio = libreView.pixelRatio
+        // Convert logical pixels to physical pixels before projection conversion
         val latLng =
             libreMap.projection.fromScreenLocation(
                 PointF(
-                    point.first().toFloat(),
-                    point.last().toFloat()
+                    (point.first() * pixelRatio).toFloat(),
+                    (point.last() * pixelRatio).toFloat()
                 )
             )
         return listOf(latLng.latitude, latLng.longitude)
@@ -183,12 +185,12 @@ class NaxaLibreController(
      * Converts a list of screen locations to geographical coordinates.
      *
      * This function takes a list of screen points, where each point is represented by a list of
-     * two doubles (x and y coordinates). It then iterates through these points, converting each
+     * two doubles (x and y coordinates in logical pixels). It then iterates through these points, converting each
      * screen location to its corresponding geographical coordinates (latitude and longitude) using
      * the map's projection. The result is a list of lists, where each inner list contains the
      * latitude and longitude of the converted point.
      *
-     * @param points A list of screen locations, where each location is a list of two doubles (x, y).
+     * @param points A list of screen locations, where each location is a list of two doubles (x, y) in logical pixels.
      * @param callback A callback function that receives the result.
      *
      */
@@ -203,10 +205,15 @@ class NaxaLibreController(
                 return
             }
 
-            val inputArray = points.flatten().toDoubleArray()
-            val outputArray = DoubleArray(inputArray.size)
+            val pixelRatio = libreView.pixelRatio
+            // Convert logical pixels to physical pixels before projection conversion
+            val physicalPixelPoints = points.flatten().mapIndexed { index, coordinate ->
+                coordinate * pixelRatio
+            }.toDoubleArray()
 
-            libreMap.projection.fromScreenLocations(inputArray, outputArray)
+            val outputArray = DoubleArray(physicalPixelPoints.size)
+
+            libreMap.projection.fromScreenLocations(physicalPixelPoints, outputArray)
 
             callback(Result.success(outputArray.toList().chunked(2)))
 
@@ -218,12 +225,17 @@ class NaxaLibreController(
     /**
      * Converts geographical coordinates to a screen location.
      * @param latLng A list containing the latitude and longitude.
-     * @return A list containing the x and y coordinates of the corresponding screen location.
+     * @return A list containing the x and y coordinates of the corresponding screen location in logical pixels.
      */
     override fun toScreenLocation(latLng: List<Double>): List<Double> {
         val screenLocation =
             libreMap.projection.toScreenLocation(LatLng(latLng[0], latLng[1]))
-        return listOf(screenLocation.x.toDouble(), screenLocation.y.toDouble())
+        val pixelRatio = libreView.pixelRatio
+        // Convert physical pixels to logical pixels to match iOS behavior
+        return listOf(
+            screenLocation.x.toDouble() / pixelRatio,
+            screenLocation.y.toDouble() / pixelRatio
+        )
     }
 
     /**
@@ -239,7 +251,7 @@ class NaxaLibreController(
      *                     pair [latitude, longitude].
      * @param callback A lambda function that will be invoked with the result of the conversion.
      *                 The result is a `Result` object, which either contains a list of screen
-     *                 coordinates (x, y) on success or an exception on failure.
+     *                 coordinates (x, y) in logical pixels on success or an exception on failure.
      */
     override fun toScreenLocations(
         listOfLatLng: List<List<Double>>,
@@ -257,7 +269,16 @@ class NaxaLibreController(
 
             libreMap.projection.toScreenLocations(inputArray, outputArray)
 
-            callback(Result.success(outputArray.toList().chunked(2)))
+            val pixelRatio = libreView.pixelRatio
+            // Convert physical pixels to logical pixels to match iOS behavior
+            val logicalPixelResults = outputArray.toList().chunked(2).map { coordinates ->
+                listOf(
+                    coordinates[0] / pixelRatio,
+                    coordinates[1] / pixelRatio
+                )
+            }
+
+            callback(Result.success(logicalPixelResults))
 
         } catch (e: Exception) {
             callback(Result.failure(e))
