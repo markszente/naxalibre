@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -37,6 +38,41 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
   /// The [listeners] parameter is required and provides the listeners for map
   /// events.
   NaxaLibreControllerImpl(this._listeners);
+
+  /// Converts annotation arguments by applying pixel ratio conversion for Android.
+  /// This ensures consistent icon sizes across platforms by converting logical pixels
+  /// to physical pixels for Android, while leaving iOS unchanged (it uses logical pixels natively).
+  Map<String, dynamic> _convertAnnotationArgsWithPixelRatio(
+    Map<String, dynamic> args, 
+    double pixelRatio,
+  ) {
+    // Only apply conversion for Android platform
+    if (!Platform.isAndroid) {
+      return args;
+    }
+
+    final convertedArgs = Map<String, dynamic>.from(args);
+    
+    // Check if this annotation has options
+    if (convertedArgs['options'] is Map<String, dynamic>) {
+      final options = Map<String, dynamic>.from(convertedArgs['options']);
+      
+      // Check if layout properties exist and contain icon-size
+      if (options['layout'] is Map<String, dynamic>) {
+        final layout = Map<String, dynamic>.from(options['layout']);
+        
+        // Convert icon-size from logical pixels to physical pixels for Android
+        if (layout['icon-size'] is num) {
+          layout['icon-size'] = (layout['icon-size'] as num).toDouble() * pixelRatio;
+        }
+        
+        options['layout'] = layout;
+        convertedArgs['options'] = options;
+      }
+    }
+    
+    return convertedArgs;
+  }
 
   @override
   Future<void> animateCamera(
@@ -218,7 +254,16 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
         }
       }
 
-      final response = await _hostApi.addAnnotation(annotation.toArgs());
+      // Get pixel ratio for Android conversion
+      final pixelRatio = await getPixelRatio() ?? 1.0;
+      
+      // Convert annotation arguments with pixel ratio for Android
+      final annotationArgs = _convertAnnotationArgsWithPixelRatio(
+        annotation.toArgs(),
+        pixelRatio,
+      );
+
+      final response = await _hostApi.addAnnotation(annotationArgs);
 
       return {
         ...response,
@@ -248,7 +293,16 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
         }
       }
 
-      final response = await _hostApi.updateAnnotation(id, annotation.toArgs());
+      // Get pixel ratio for Android conversion
+      final pixelRatio = await getPixelRatio() ?? 1.0;
+      
+      // Convert annotation arguments with pixel ratio for Android
+      final annotationArgs = _convertAnnotationArgsWithPixelRatio(
+        annotation.toArgs(),
+        pixelRatio,
+      );
+
+      final response = await _hostApi.updateAnnotation(id, annotationArgs);
 
       return {
         ...response,
