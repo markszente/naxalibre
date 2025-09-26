@@ -369,8 +369,7 @@ class NaxaLibreController: NSObject, NaxaLibreHostApi {
     }
     
     func setLogoMargins(left: Double, top: Double, right: Double, bottom: Double) throws {
-        libreView.logoView.frame.origin.x = CGFloat(left)
-        libreView.logoView.frame.origin.y = CGFloat(top)
+        libreView.logoViewMargins = try NaxaLibreMarginUtils.getMargins(left: left, top: top, right: right, bottom: bottom)
     }
     
     func isLogoEnabled() throws -> Bool {
@@ -378,8 +377,7 @@ class NaxaLibreController: NSObject, NaxaLibreHostApi {
     }
     
     func setCompassMargins(left: Double, top: Double, right: Double, bottom: Double) throws {
-        libreView.compassView.frame.origin.x = CGFloat(left)
-        libreView.compassView.frame.origin.y = CGFloat(top)
+        libreView.compassViewMargins = try NaxaLibreMarginUtils.getMargins(left: left, top: top, right: right, bottom: bottom)
     }
     
     func setCompassImage(bytes: FlutterStandardTypedData) throws {
@@ -402,8 +400,7 @@ class NaxaLibreController: NSObject, NaxaLibreHostApi {
     }
     
     func setAttributionMargins(left: Double, top: Double, right: Double, bottom: Double) throws {
-        libreView.attributionButton.frame.origin.x = CGFloat(left)
-        libreView.attributionButton.frame.origin.y = CGFloat(top)
+        libreView.attributionButtonMargins = try NaxaLibreMarginUtils.getMargins(left: left, top: top, right: right, bottom: bottom)
     }
     
     func isAttributionEnabled() throws -> Bool {
@@ -1139,6 +1136,8 @@ class NaxaLibreController: NSObject, NaxaLibreHostApi {
             libreView.shouldRequestAuthorizationToUseLocationServices = locationSettings.shouldRequestAuthorizationOrPermission
         }
     }
+    
+
     
     deinit {
         naxaLibreListeners.unregister()

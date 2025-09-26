@@ -26,9 +26,9 @@ object UiSettingsArgsParser {
         val attributionGravity: String? = null,
         val compassGravity: String? = null,
         val logoGravity: String? = null,
-        val logoMargins: List<Int>? = null,
-        val compassMargins: List<Int>? = null,
-        val attributionMargins: List<Int>? = null,
+        val logoMargins: List<Double>? = null,
+        val compassMargins: List<Double>? = null,
+        val attributionMargins: List<Double>? = null,
         val rotateGesturesEnabled: Boolean = true,
         val tiltGesturesEnabled: Boolean = true,
         val zoomGesturesEnabled: Boolean = true,
@@ -125,11 +125,10 @@ object UiSettingsArgsParser {
      *   If an element cannot be converted to a `Double`, it defaults to `0.0`.
      *
      */
-    private fun parseMargins(margins: Any?): List<Int>? {
+    private fun parseMargins(margins: Any?): List<Double>? {
         return if (margins is List<*> && margins.size == 4) {
             margins.map { 
-                val doubleValue = it?.toString()?.toDoubleOrNull() ?: 0.0
-                doubleValue.toInt()
+                it?.toString()?.toDoubleOrNull() ?: 0.0
             }
         } else null
     }

@@ -43,7 +43,7 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
   /// This ensures consistent icon sizes across platforms by converting logical pixels
   /// to physical pixels for Android, while leaving iOS unchanged (it uses logical pixels natively).
   Map<String, dynamic> _convertAnnotationArgsWithPixelRatio(
-    Map<String, dynamic> args, 
+    Map<String, dynamic> args,
     double pixelRatio,
   ) {
     // Only apply conversion for Android platform
@@ -52,25 +52,26 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
     }
 
     final convertedArgs = Map<String, dynamic>.from(args);
-    
+
     // Check if this annotation has options
     if (convertedArgs['options'] is Map<String, dynamic>) {
       final options = Map<String, dynamic>.from(convertedArgs['options']);
-      
+
       // Check if layout properties exist and contain icon-size
       if (options['layout'] is Map<String, dynamic>) {
         final layout = Map<String, dynamic>.from(options['layout']);
-        
+
         // Convert icon-size from logical pixels to physical pixels for Android
         if (layout['icon-size'] is num) {
-          layout['icon-size'] = (layout['icon-size'] as num).toDouble() * pixelRatio;
+          layout['icon-size'] =
+              (layout['icon-size'] as num).toDouble() * pixelRatio;
         }
-        
+
         options['layout'] = layout;
         convertedArgs['options'] = options;
       }
     }
-    
+
     return convertedArgs;
   }
 
@@ -256,7 +257,7 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
 
       // Get pixel ratio for Android conversion
       final pixelRatio = await getPixelRatio() ?? 1.0;
-      
+
       // Convert annotation arguments with pixel ratio for Android
       final annotationArgs = _convertAnnotationArgsWithPixelRatio(
         annotation.toArgs(),
@@ -295,7 +296,7 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
 
       // Get pixel ratio for Android conversion
       final pixelRatio = await getPixelRatio() ?? 1.0;
-      
+
       // Convert annotation arguments with pixel ratio for Android
       final annotationArgs = _convertAnnotationArgsWithPixelRatio(
         annotation.toArgs(),

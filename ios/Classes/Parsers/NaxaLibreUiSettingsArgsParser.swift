@@ -137,15 +137,15 @@ extension MLNMapView {
         }
         
         if let logoMargins = uiSettings.logoMargins {
-            self.logoView.layoutMargins = logoMargins
+            self.applyMarginsToLogoView(margins: logoMargins)
         }
         
         if let compassMargins = uiSettings.compassMargins {
-            self.compassView.layoutMargins = compassMargins
+            self.applyMarginsToCompassView(margins: compassMargins)
         }
         
         if let attributionMargins = uiSettings.attributionMargins {
-            self.attributionButton.contentEdgeInsets = attributionMargins
+            self.applyMarginsToAttributionButton(margins: attributionMargins)
         }
         
         self.isRotateEnabled = uiSettings.rotateGesturesEnabled
@@ -153,5 +153,54 @@ extension MLNMapView {
         self.isScrollEnabled = uiSettings.scrollGesturesEnabled
         self.isPitchEnabled = uiSettings.tiltGesturesEnabled
     }
+    
+
+    
+    /// Applies margins to the logo view using MapLibre's native property
+    private func applyMarginsToLogoView(margins: UIEdgeInsets) {
+        do {
+            let logoMargins = try NaxaLibreMarginUtils.getMargins(
+                left: Double(margins.left),
+                top: Double(margins.top),
+                right: Double(margins.right),
+                bottom: Double(margins.bottom)
+            )
+            self.logoViewMargins = logoMargins
+        } catch {
+            print("Error setting logo margins: \(error)")
+        }
+    }
+    
+    /// Applies margins to the compass view using MapLibre's native property
+    private func applyMarginsToCompassView(margins: UIEdgeInsets) {
+        do {
+            let compassMargins = try NaxaLibreMarginUtils.getMargins(
+                left: Double(margins.left),
+                top: Double(margins.top),
+                right: Double(margins.right),
+                bottom: Double(margins.bottom)
+            )
+            self.compassViewMargins = compassMargins
+        } catch {
+            print("Error setting compass margins: \(error)")
+        }
+    }
+    
+    /// Applies margins to the attribution button using MapLibre's native property
+    private func applyMarginsToAttributionButton(margins: UIEdgeInsets) {
+        do {
+            let attributionMargins = try NaxaLibreMarginUtils.getMargins(
+                left: Double(margins.left),
+                top: Double(margins.top),
+                right: Double(margins.right),
+                bottom: Double(margins.bottom)
+            )
+            self.attributionButtonMargins = attributionMargins
+        } catch {
+            print("Error setting attribution margins: \(error)")
+        }
+    }
+    
+
 }
 

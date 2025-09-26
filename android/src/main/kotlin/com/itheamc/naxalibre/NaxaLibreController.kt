@@ -633,18 +633,20 @@ class NaxaLibreController(
 
     /**
      * Sets the margins for the logo.
+     * Converts logical pixels (dp) to physical pixels using device density.
      *
-     * @param left The left margin.
-     * @param top The top margin.
-     * @param right The right margin.
-     * @param bottom The bottom margin.
+     * @param left The left margin in logical pixels.
+     * @param top The top margin in logical pixels.
+     * @param right The right margin in logical pixels.
+     * @param bottom The bottom margin in logical pixels.
      */
     override fun setLogoMargins(left: Double, top: Double, right: Double, bottom: Double) {
+        val density = activity.resources.displayMetrics.density
         libreMap.uiSettings.setLogoMargins(
-            left.toInt(),
-            top.toInt(),
-            right.toInt(),
-            bottom.toInt()
+            (left * density).toInt(),
+            (top * density).toInt(),
+            (right * density).toInt(),
+            (bottom * density).toInt()
         )
     }
 
@@ -662,19 +664,45 @@ class NaxaLibreController(
 
     /**
      * Sets the margins for the compass.
+     * Converts logical pixels (dp) to physical pixels using device density.
      *
-     * @param left The left margin.
-     * @param top The top margin.
-     * @param right The right margin.
-     * @param bottom The bottom margin.
+     * @param left The left margin in logical pixels.
+     * @param top The top margin in logical pixels.
+     * @param right The right margin in logical pixels.
+     * @param bottom The bottom margin in logical pixels.
      */
     override fun setCompassMargins(left: Double, top: Double, right: Double, bottom: Double) {
-        libreMap.uiSettings.setCompassMargins(
-            left.toInt(),
-            top.toInt(),
-            right.toInt(),
-            bottom.toInt()
-        )
+        // Validate that both horizontal or both vertical margins are not set
+        if (left != 0.0 && right != 0.0) {
+            throw IllegalArgumentException("Cannot set both left and right compass margins")
+        }
+        if (top != 0.0 && bottom != 0.0) {
+            throw IllegalArgumentException("Cannot set both top and bottom compass margins")
+        }
+        
+        val density = activity.resources.displayMetrics.density
+        
+        // Calculate margins based on consistent logic:
+        // Horizontal: left = positive, right = negative (but we pass absolute values to Android)
+        // Vertical: top = positive, bottom = negative (but we pass absolute values to Android)
+        var leftMargin = 0
+        var topMargin = 0 
+        var rightMargin = 0
+        var bottomMargin = 0
+        
+        if (left != 0.0) {
+            leftMargin = (left * density).toInt()
+        } else if (right != 0.0) {
+            rightMargin = (right * density).toInt()
+        }
+        
+        if (top != 0.0) {
+            topMargin = (top * density).toInt()
+        } else if (bottom != 0.0) {
+            bottomMargin = (bottom * density).toInt()
+        }
+        
+        libreMap.uiSettings.setCompassMargins(leftMargin, topMargin, rightMargin, bottomMargin)
     }
 
     /**
@@ -718,20 +746,22 @@ class NaxaLibreController(
 
     /**
      * Sets the margins for the attribution logo.
+     * Converts logical pixels (dp) to physical pixels using device density.
      *
      * The attribution logo is typically used to display the data source or copyright information.
      *
-     * @param left The left margin in pixels.
-     * @param top The top margin in pixels.
-     * @param right The right margin in pixels.
-     * @param bottom The bottom margin in pixels.
+     * @param left The left margin in logical pixels.
+     * @param top The top margin in logical pixels.
+     * @param right The right margin in logical pixels.
+     * @param bottom The bottom margin in logical pixels.
      */
     override fun setAttributionMargins(left: Double, top: Double, right: Double, bottom: Double) {
+        val density = activity.resources.displayMetrics.density
         libreMap.uiSettings.setAttributionMargins(
-            left.toInt(),
-            top.toInt(),
-            right.toInt(),
-            bottom.toInt()
+            (left * density).toInt(),
+            (top * density).toInt(),
+            (right * density).toInt(),
+            (bottom * density).toInt()
         )
     }
 
