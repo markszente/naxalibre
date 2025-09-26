@@ -859,6 +859,15 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
   }
 
   @override
+  Future<void> setAttributionEnabled(bool enabled) async {
+    try {
+      await _hostApi.setAttributionEnabled(enabled);
+    } catch (e) {
+      NaxaLibreLogger.logError("[$runtimeType.setAttributionEnabled] => $e");
+    }
+  }
+
+  @override
   Future<bool?> isAttributionEnabled() async {
     try {
       final enabled = await _hostApi.isAttributionEnabled();
@@ -866,6 +875,15 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
     } catch (e) {
       NaxaLibreLogger.logError("[$runtimeType.isAttributionEnabled] => $e");
       return null;
+    }
+  }
+
+  @override
+  Future<void> setCompassEnabled(bool enabled) async {
+    try {
+      await _hostApi.setCompassEnabled(enabled);
+    } catch (e) {
+      NaxaLibreLogger.logError("[$runtimeType.setCompassEnabled] => $e");
     }
   }
 
@@ -913,6 +931,15 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
     } catch (e) {
       NaxaLibreLogger.logError("[$runtimeType.isFullyLoaded] => $e");
       return null;
+    }
+  }
+
+  @override
+  Future<void> setLogoEnabled(bool enabled) async {
+    try {
+      await _hostApi.setLogoEnabled(enabled);
+    } catch (e) {
+      NaxaLibreLogger.logError("[$runtimeType.setLogoEnabled] => $e");
     }
   }
 

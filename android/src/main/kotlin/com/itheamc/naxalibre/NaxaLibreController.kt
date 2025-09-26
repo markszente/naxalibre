@@ -658,6 +658,10 @@ class NaxaLibreController(
      *
      * @return `true` if the logo is enabled and should be displayed, `false` otherwise.
      */
+    override fun setLogoEnabled(enabled: Boolean) {
+        libreMap.uiSettings.isLogoEnabled = enabled
+    }
+
     override fun isLogoEnabled(): Boolean {
         return libreMap.uiSettings.isLogoEnabled
     }
@@ -732,6 +736,10 @@ class NaxaLibreController(
      * Checks if the compass is enabled.
      * @return True if the compass is enabled, false otherwise.
      */
+    override fun setCompassEnabled(enabled: Boolean) {
+        libreMap.uiSettings.isCompassEnabled = enabled
+    }
+
     override fun isCompassEnabled(): Boolean {
         return libreMap.uiSettings.isCompassEnabled
     }
@@ -772,6 +780,10 @@ class NaxaLibreController(
      *
      * @return True if the attribution control is enabled, false otherwise.
      */
+    override fun setAttributionEnabled(enabled: Boolean) {
+        libreMap.uiSettings.isAttributionEnabled = enabled
+    }
+
     override fun isAttributionEnabled(): Boolean {
         return libreMap.uiSettings.isAttributionEnabled
     }

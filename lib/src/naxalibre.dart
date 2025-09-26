@@ -182,6 +182,55 @@ class _MapLibreViewState extends State<NaxaLibreMap> {
   }
 
   @override
+  void didUpdateWidget(NaxaLibreMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _handleUiSettingsUpdates(oldWidget.uiSettings, widget.uiSettings);
+  }
+
+  /// Automatically detect and apply UI settings changes
+  void _handleUiSettingsUpdates(UiSettings oldSettings, UiSettings newSettings) {
+    if (_libreController == null) return;
+
+    // Check for compass margin changes
+    if (oldSettings.compassMargins != newSettings.compassMargins && 
+        newSettings.compassMargins != null) {
+      _libreController!.setCompassMargins(newSettings.compassMargins!);
+    }
+
+    // Check for attribution margin changes
+    if (oldSettings.attributionMargins != newSettings.attributionMargins && 
+        newSettings.attributionMargins != null) {
+      _libreController!.setAttributionMargins(newSettings.attributionMargins!);
+    }
+
+    // Check for logo margin changes
+    if (oldSettings.logoMargins != newSettings.logoMargins && 
+        newSettings.logoMargins != null) {
+      _libreController!.setLogoMargins(newSettings.logoMargins!);
+    }
+
+    // Check for compass fade setting changes
+    if (oldSettings.fadeCompassWhenFacingNorth != newSettings.fadeCompassWhenFacingNorth) {
+      _libreController!.setCompassFadeFacingNorth(newSettings.fadeCompassWhenFacingNorth);
+    }
+
+    // Check for compass enabled/disabled changes
+    if (oldSettings.compassEnabled != newSettings.compassEnabled) {
+      _libreController!.setCompassEnabled(newSettings.compassEnabled);
+    }
+
+    // Check for logo enabled/disabled changes
+    if (oldSettings.logoEnabled != newSettings.logoEnabled) {
+      _libreController!.setLogoEnabled(newSettings.logoEnabled);
+    }
+
+    // Check for attribution enabled/disabled changes  
+    if (oldSettings.attributionEnabled != newSettings.attributionEnabled) {
+      _libreController!.setAttributionEnabled(newSettings.attributionEnabled);
+    }
+  }
+
+  @override
   void dispose() {
     _libreController?.dispose();
     super.dispose();

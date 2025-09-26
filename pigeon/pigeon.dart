@@ -97,6 +97,8 @@ abstract class NaxaLibreHostApi {
   // Method from UiSettings i.e. mapboxMap.uiSettings
   void setLogoMargins(double left, double top, double right, double bottom);
 
+  void setLogoEnabled(bool enabled);
+
   bool isLogoEnabled();
 
   void setCompassMargins(double left, double top, double right, double bottom);
@@ -104,6 +106,8 @@ abstract class NaxaLibreHostApi {
   void setCompassImage(Uint8List bytes);
 
   void setCompassFadeFacingNorth(bool compassFadeFacingNorth);
+
+  void setCompassEnabled(bool enabled);
 
   bool isCompassEnabled();
 
@@ -115,6 +119,8 @@ abstract class NaxaLibreHostApi {
     double right,
     double bottom,
   );
+
+  void setAttributionEnabled(bool enabled);
 
   bool isAttributionEnabled();
 

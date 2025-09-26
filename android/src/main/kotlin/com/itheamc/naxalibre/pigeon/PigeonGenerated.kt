@@ -243,13 +243,16 @@ interface NaxaLibreHostApi {
   fun queryRenderedFeatures(args: Map<String, Any?>): List<Map<Any?, Any?>>
   fun lastKnownLocation(): List<Double>
   fun setLogoMargins(left: Double, top: Double, right: Double, bottom: Double)
+  fun setLogoEnabled(enabled: Boolean)
   fun isLogoEnabled(): Boolean
   fun setCompassMargins(left: Double, top: Double, right: Double, bottom: Double)
   fun setCompassImage(bytes: ByteArray)
   fun setCompassFadeFacingNorth(compassFadeFacingNorth: Boolean)
+  fun setCompassEnabled(enabled: Boolean)
   fun isCompassEnabled(): Boolean
   fun isCompassFadeWhenFacingNorth(): Boolean
   fun setAttributionMargins(left: Double, top: Double, right: Double, bottom: Double)
+  fun setAttributionEnabled(enabled: Boolean)
   fun isAttributionEnabled(): Boolean
   fun setAttributionTintColor(color: Long)
   fun getUri(): String
@@ -804,6 +807,24 @@ interface NaxaLibreHostApi {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.setLogoEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            val wrapped: List<Any?> = try {
+              api.setLogoEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              PigeonGeneratedPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.isLogoEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -876,6 +897,24 @@ interface NaxaLibreHostApi {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.setCompassEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            val wrapped: List<Any?> = try {
+              api.setCompassEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              PigeonGeneratedPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.isCompassEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -916,6 +955,24 @@ interface NaxaLibreHostApi {
             val bottomArg = args[3] as Double
             val wrapped: List<Any?> = try {
               api.setAttributionMargins(leftArg, topArg, rightArg, bottomArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              PigeonGeneratedPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.setAttributionEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            val wrapped: List<Any?> = try {
+              api.setAttributionEnabled(enabledArg)
               listOf(null)
             } catch (exception: Throwable) {
               PigeonGeneratedPigeonUtils.wrapError(exception)

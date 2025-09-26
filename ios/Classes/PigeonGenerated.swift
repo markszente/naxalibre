@@ -294,13 +294,16 @@ protocol NaxaLibreHostApi {
   func queryRenderedFeatures(args: [String: Any?]) throws -> [[AnyHashable?: Any?]]
   func lastKnownLocation() throws -> [Double]
   func setLogoMargins(left: Double, top: Double, right: Double, bottom: Double) throws
+  func setLogoEnabled(enabled: Bool) throws
   func isLogoEnabled() throws -> Bool
   func setCompassMargins(left: Double, top: Double, right: Double, bottom: Double) throws
   func setCompassImage(bytes: FlutterStandardTypedData) throws
   func setCompassFadeFacingNorth(compassFadeFacingNorth: Bool) throws
+  func setCompassEnabled(enabled: Bool) throws
   func isCompassEnabled() throws -> Bool
   func isCompassFadeWhenFacingNorth() throws -> Bool
   func setAttributionMargins(left: Double, top: Double, right: Double, bottom: Double) throws
+  func setAttributionEnabled(enabled: Bool) throws
   func isAttributionEnabled() throws -> Bool
   func setAttributionTintColor(color: Int64) throws
   func getUri() throws -> String
@@ -780,6 +783,21 @@ class NaxaLibreHostApiSetup {
     } else {
       setLogoMarginsChannel.setMessageHandler(nil)
     }
+    let setLogoEnabledChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.setLogoEnabled\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLogoEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        do {
+          try api.setLogoEnabled(enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setLogoEnabledChannel.setMessageHandler(nil)
+    }
     let isLogoEnabledChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.isLogoEnabled\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       isLogoEnabledChannel.setMessageHandler { _, reply in
@@ -841,6 +859,21 @@ class NaxaLibreHostApiSetup {
     } else {
       setCompassFadeFacingNorthChannel.setMessageHandler(nil)
     }
+    let setCompassEnabledChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.setCompassEnabled\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setCompassEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        do {
+          try api.setCompassEnabled(enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setCompassEnabledChannel.setMessageHandler(nil)
+    }
     let isCompassEnabledChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.isCompassEnabled\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       isCompassEnabledChannel.setMessageHandler { _, reply in
@@ -884,6 +917,21 @@ class NaxaLibreHostApiSetup {
       }
     } else {
       setAttributionMarginsChannel.setMessageHandler(nil)
+    }
+    let setAttributionEnabledChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.setAttributionEnabled\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setAttributionEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        do {
+          try api.setAttributionEnabled(enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setAttributionEnabledChannel.setMessageHandler(nil)
     }
     let isAttributionEnabledChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.naxalibre.NaxaLibreHostApi.isAttributionEnabled\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

@@ -372,6 +372,10 @@ class NaxaLibreController: NSObject, NaxaLibreHostApi {
         libreView.logoViewMargins = try NaxaLibreMarginUtils.getMargins(left: left, top: top, right: right, bottom: bottom)
     }
     
+    func setLogoEnabled(enabled: Bool) throws {
+        libreView.logoView.isHidden = !enabled
+    }
+    
     func isLogoEnabled() throws -> Bool {
         return !libreView.logoView.isHidden
     }
@@ -391,6 +395,10 @@ class NaxaLibreController: NSObject, NaxaLibreHostApi {
         throw NSError(domain: "Not supported", code: 0, userInfo: nil)
     }
     
+    func setCompassEnabled(enabled: Bool) throws {
+        libreView.compassView.isHidden = !enabled
+    }
+    
     func isCompassEnabled() throws -> Bool {
         return !libreView.compassView.isHidden
     }
@@ -401,6 +409,10 @@ class NaxaLibreController: NSObject, NaxaLibreHostApi {
     
     func setAttributionMargins(left: Double, top: Double, right: Double, bottom: Double) throws {
         libreView.attributionButtonMargins = try NaxaLibreMarginUtils.getMargins(left: left, top: top, right: right, bottom: bottom)
+    }
+    
+    func setAttributionEnabled(enabled: Bool) throws {
+        libreView.attributionButton.isHidden = !enabled
     }
     
     func isAttributionEnabled() throws -> Bool {

@@ -516,6 +516,12 @@ abstract class NaxaLibreController {
   /// - Returns: A [Future] that completes when the operation is done.
   Future<void> setLogoMargins(EdgeInsets margin);
 
+  /// Sets whether the logo is enabled.
+  ///
+  /// - [enabled]: If `true`, the logo is enabled; if `false`, it is disabled.
+  /// - Returns: A [Future] that completes when the operation is done.
+  Future<void> setLogoEnabled(bool enabled);
+
   /// Checks if the map logo is enabled.
   ///
   /// - Returns: A [Future] that resolves to `true` if the logo is enabled, `false` otherwise,
@@ -540,6 +546,12 @@ abstract class NaxaLibreController {
   /// - Returns: A [Future] that completes when the operation is done.
   Future<void> setCompassFadeFacingNorth(bool compassFadeFacingNorth);
 
+  /// Sets whether the compass is enabled.
+  ///
+  /// - [enabled]: If `true`, the compass is enabled; if `false`, it is disabled.
+  /// - Returns: A [Future] that completes when the operation is done.
+  Future<void> setCompassEnabled(bool enabled);
+
   /// Checks if the compass is enabled.
   ///
   /// - Returns: A [Future] that resolves to `true` if the compass is enabled, `false` otherwise,
@@ -557,6 +569,12 @@ abstract class NaxaLibreController {
   /// - [margin]: The left, top, right, and bottom margin.
   /// - Returns: A [Future] that completes when the operation is done.
   Future<void> setAttributionMargins(EdgeInsets margin);
+
+  /// Sets whether the attribution is enabled.
+  ///
+  /// - [enabled]: If `true`, the attribution is enabled; if `false`, it is disabled.
+  /// - Returns: A [Future] that completes when the operation is done.
+  Future<void> setAttributionEnabled(bool enabled);
 
   /// Checks if the attribution is enabled.
   ///
