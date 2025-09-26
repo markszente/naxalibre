@@ -23,7 +23,7 @@ object NaxaLibreMapOptionsArgsParser {
      * @param args An optional [Map] containing key-value pairs representing the map's configuration.
      *             If null, default options are created from the context.
      *             The supported keys and their types are:
-     *  - **camera**: A map representing camera position options. It should contain arguments as described in [CameraPositionArgsParser.parseArgs]
+     *  - **position**: A map representing camera position options. It should contain arguments as described in [CameraPositionArgsParser.parseArgs]
      *  - **minZoom**: The minimum zoom level.
      *  - **maxZoom**: The maximum zoom level.
      *  - **minPitch**: The minimum pitch angle.
@@ -47,7 +47,7 @@ object NaxaLibreMapOptionsArgsParser {
         val options = MapLibreMapOptions.createFromAttributes(context)
 
         // Parse camera position if provided
-        args["camera"]?.let { cameraArgs ->
+        args["position"]?.let { cameraArgs ->
             if (cameraArgs is Map<*, *>) {
                 val cameraPosition = CameraPositionArgsParser.parseArgs(cameraArgs)
                 options.camera(cameraPosition)
