@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:naxalibre/naxalibre.dart';
 
 import 'controller/naxalibre_controller.dart';
 import 'controller/naxalibre_controller_impl.dart';
@@ -166,7 +167,7 @@ class _MapLibreViewState extends State<NaxaLibreMap> {
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> creationParams = {
-      'styleUrl': widget.style,
+      'styleUrl': StyleUtils.formatStylePath(widget.style),
       'mapOptions': widget.mapOptions.toArgs(),
       'uiSettings': widget.uiSettings.toArgs(),
       'locationSettings': widget.locationSettings.toArgs(),
