@@ -22,6 +22,7 @@ import '../layers/layer.dart';
 import '../style_images/style_image.dart';
 import '../typedefs/typedefs.dart';
 import '../utils/naxalibre_logger.dart';
+import '../utils/style_utils.dart';
 import 'naxalibre_controller.dart';
 
 class NaxaLibreControllerImpl extends NaxaLibreController {
@@ -1069,7 +1070,9 @@ class NaxaLibreControllerImpl extends NaxaLibreController {
   @override
   Future<void> setStyle(String style) async {
     try {
-      await _hostApi.setStyle(style);
+      // Format the style path for cross-platform compatibility
+      final formattedStyle = StyleUtils.formatStylePath(style);
+      await _hostApi.setStyle(formattedStyle);
     } catch (e) {
       NaxaLibreLogger.logError("[$runtimeType.setStyle] => $e");
     }

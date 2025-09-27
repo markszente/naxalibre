@@ -459,7 +459,30 @@ abstract class NaxaLibreController {
 
   /// Sets the style of the map.
   ///
-  /// - [style]: The style to set as a [String].
+  /// - [style]: The style to set as a [String]. Supports multiple formats:
+  ///   - **Web URLs**: `https://example.com/style.json`
+  ///   - **JSON strings**: Valid MapLibre GL style JSON
+  ///   - **Local file paths**: Absolute file paths (automatically formatted per platform)
+  ///
+  /// **Cross-Platform File Path Handling:**
+  /// The library automatically handles platform-specific file path formatting:
+  /// - **iOS**: Converts to absolute paths without `file://` prefix
+  /// - **Android**: Ensures `file://` prefix is present
+  /// 
+  /// You can pass local file paths in either format - the library will convert
+  /// them appropriately for each platform.
+  ///
+  /// **Examples:**
+  /// ```dart
+  /// // All of these work cross-platform:
+  /// await controller.setStyle("https://example.com/style.json");
+  /// await controller.setStyle("/path/to/local/style.json");  
+  /// await controller.setStyle("file:///path/to/local/style.json");
+  /// await controller.setStyle('{"version": 8, "sources": {...}}');
+  /// ```
+  ///
+  /// **Note:** For manual control over path formatting, use [StyleUtils.formatStylePath].
+  ///
   /// - Returns: A [Future] that completes when the operation is done.
   Future<void> setStyle(String style);
 

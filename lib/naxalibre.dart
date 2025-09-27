@@ -5,6 +5,7 @@ export 'src/style_images/style_image.dart';
 export 'src/typedefs/typedefs.dart';
 export 'src/enums/enums.dart';
 export 'src/controller/naxalibre_controller.dart';
+export 'src/utils/style_utils.dart';
 
 export 'src/models/camera_position.dart';
 export 'src/models/camera_update.dart';
