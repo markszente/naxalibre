@@ -1571,7 +1571,7 @@ extension NaxaLibreAnnotationsManager {
             id: updated.id,
             type: updated.type,
             layer: circleLayer,
-            geometry: updated.geometry,
+            geometry: newGeometry,
             data: updated.data,
             draggable: updated.draggable
         )
@@ -1597,7 +1597,7 @@ extension NaxaLibreAnnotationsManager {
             id: updated.id,
             type: updated.type,
             layer: symbolLayer,
-            geometry: updated.geometry,
+            geometry: newGeometry,
             data: updated.data,
             draggable: updated.draggable
         )
@@ -1623,7 +1623,7 @@ extension NaxaLibreAnnotationsManager {
             id: updated.id,
             type: updated.type,
             layer: polylineLayer,
-            geometry: updated.geometry,
+            geometry: newGeometry,
             data: updated.data,
             draggable: updated.draggable
         )
@@ -1649,7 +1649,7 @@ extension NaxaLibreAnnotationsManager {
             id: updated.id,
             type: updated.type,
             layer: polygonLayer,
-            geometry: updated.geometry,
+            geometry: newGeometry,
             data: updated.data,
             draggable: updated.draggable
         )
@@ -1691,14 +1691,26 @@ extension NaxaLibreAnnotationsManager {
             let pointFeature = MLNPointFeature()
             pointFeature.coordinate = point.coordinate
             pointFeature.attributes = properties
+            // CRITICAL: Set the identifier to match the annotation ID for proper removal
+            if let annotationId = properties["id"] as? Int64 {
+                pointFeature.identifier = String(annotationId)
+            }
             feature = pointFeature
         } else if let polyline = newGeometry as? MLNPolyline {
             let lineFeature = MLNPolylineFeature(coordinates: polyline.coordinates, count: polyline.pointCount)
             lineFeature.attributes = properties
+            // CRITICAL: Set the identifier to match the annotation ID for proper removal
+            if let annotationId = properties["id"] as? Int64 {
+                lineFeature.identifier = String(annotationId)
+            }
             feature = lineFeature
         } else if let polygon = newGeometry as? MLNPolygon {
             let polygonFeature = MLNPolygonFeature(coordinates: polygon.coordinates, count: polygon.pointCount)
             polygonFeature.attributes = properties
+            // CRITICAL: Set the identifier to match the annotation ID for proper removal
+            if let annotationId = properties["id"] as? Int64 {
+                polygonFeature.identifier = String(annotationId)
+            }
             feature = polygonFeature
         } else {
             return
