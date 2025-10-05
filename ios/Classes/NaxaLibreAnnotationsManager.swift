@@ -50,6 +50,10 @@ class NaxaLibreAnnotationsManager: NSObject {
     init(binaryMessenger: FlutterBinaryMessenger, libreView: MLNMapView) {
         self.binaryMessenger = binaryMessenger
         self.libreView = libreView
+        super.init()
+        
+        // Initialize drag gesture recognizer immediately to avoid first-touch issues
+        setupDragGestureRecognizer()
     }
     
     /**
@@ -1347,21 +1351,37 @@ extension NaxaLibreAnnotationsManager {
         // Find the annotation from the all added annotations by id
         draggingAnnotation = allAnnotations.first {$0.id == annotationId}
         
-        // Add the drag listener
-        addlyPanGestureListenerToDetectDrag()
+        // Fire "start" event immediately when dragging is ready (matches Android behavior)
+        if let annotation = draggingAnnotation {
+            annotationDragListeners.forEach { $0(annotation.id, annotation.type, annotation, annotation, "start") }
+        }
+        
+        // Drag gesture is already set up during initialization - no need to add on-demand
+        // This fixes the first-touch issue where users had to lift finger and try again
     }
     
     /**
-     * Adds a touch listener to the `libreView` to handle dragging of annotations on the map.
+     * Sets up the drag gesture recognizer immediately during initialization.
+     * This prevents the first-touch issue where users had to lift finger and try again.
      */
-    private func addlyPanGestureListenerToDetectDrag() {
-        if isDragListenerAlreadyAdded { return }
-        
+    private func setupDragGestureRecognizer() {
         let dragGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDragGesture(_:)))
         
+        // Don't use require(toFail:) - this causes first-touch issues
+        // Instead, rely on delegate methods for proper gesture coordination
         dragGesture.delegate = self
         libreView.addGestureRecognizer(dragGesture)
         isDragListenerAlreadyAdded = true
+    }
+    
+    /**
+     * Legacy method - now just ensures the gesture is set up (should already be done in init).
+     * Kept for compatibility but shouldn't be needed anymore.
+     */
+    private func addlyPanGestureListenerToDetectDrag() {
+        if !isDragListenerAlreadyAdded {
+            setupDragGestureRecognizer()
+        }
     }
     
     /**
@@ -1381,7 +1401,7 @@ extension NaxaLibreAnnotationsManager {
         switch gesture.state {
             case .began:
                 lastCoordinate = currentCoordinate
-                annotationDragListeners.forEach { $0(annotation.id, annotation.type, annotation, annotation, "start") }
+                // "start" event now fires immediately in handleDragging(), not here
                 
             case .changed, .ended, .cancelled:
                 guard let lastCoord = lastCoordinate else { return }
@@ -1691,6 +1711,14 @@ extension NaxaLibreAnnotationsManager {
 // MARK: - UIGestureRecognizerDelegate
 extension NaxaLibreAnnotationsManager: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // When we have a dragging annotation, our drag gesture should take priority
+        // This prevents map panning while dragging annotations
         return draggingAnnotation == nil
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Only allow our drag gesture to begin if we have a dragging annotation
+        // This ensures the gesture doesn't interfere when not needed
+        return draggingAnnotation != nil
     }
 }

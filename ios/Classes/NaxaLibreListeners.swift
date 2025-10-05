@@ -139,15 +139,8 @@ class NaxaLibreListeners: NSObject, MLNMapViewDelegate, UIGestureRecognizerDeleg
     // MARK: Handler for Drag Gesture Recognizer
     // Method to register drag gesture
     private func registerDragGesture() {
-        if let existingRecognizers = libreView.gestureRecognizers {
-            for recognizer in existingRecognizers {
-                // Handle existing pan recognizers
-                if let panRecognizer = recognizer as? UIPanGestureRecognizer {
-                    dragGesture.require(toFail: panRecognizer)
-                }
-            }
-        }
-        
+        // Don't use require(toFail:) as it causes gesture priority issues
+        // The annotation manager handles its own drag gestures with proper delegation
         dragGesture.delegate = self
         libreView.addGestureRecognizer(dragGesture)
     }
