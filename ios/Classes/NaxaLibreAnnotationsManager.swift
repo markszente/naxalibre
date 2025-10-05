@@ -597,9 +597,18 @@ class NaxaLibreAnnotationsManager: NSObject {
             // Index of the annotation if already added i.e. for update
             let index = circleAnnotations.firstIndex(where: { $0.id == updatedAnnotation.id })
             
-            // Update the list
+            // Update the list with the updated annotation that uses the EXISTING layer reference
             if let i = index, i < circleAnnotations.count {
-                circleAnnotations[i] = updatedAnnotation
+                // Create updated annotation with existing layer to maintain proper reference
+                let updatedWithExistingLayer = NaxaLibreAnnotationsManager.Annotation(
+                    id: updatedAnnotation.id,
+                    type: updatedAnnotation.type,
+                    layer: layer, // Use the existing layer, not the new one
+                    geometry: updatedAnnotation.geometry,
+                    data: updatedAnnotation.data,
+                    draggable: updatedAnnotation.draggable
+                )
+                circleAnnotations[i] = updatedWithExistingLayer
             }
             
             return updatedAnnotation
@@ -741,9 +750,18 @@ class NaxaLibreAnnotationsManager: NSObject {
             // Index of the annotation if already added i.e. for update
             let index = polylineAnnotations.firstIndex(where: { $0.id == updatedAnnotation.id })
             
-            // Update the list
+            // Update the list with the updated annotation that uses the EXISTING layer reference
             if let i = index, i < polylineAnnotations.count {
-                polylineAnnotations[i] = updatedAnnotation
+                // Create updated annotation with existing layer to maintain proper reference
+                let updatedWithExistingLayer = NaxaLibreAnnotationsManager.Annotation(
+                    id: updatedAnnotation.id,
+                    type: updatedAnnotation.type,
+                    layer: layer, // Use the existing layer, not the new one
+                    geometry: updatedAnnotation.geometry,
+                    data: updatedAnnotation.data,
+                    draggable: updatedAnnotation.draggable
+                )
+                polylineAnnotations[i] = updatedWithExistingLayer
             }
             
             return updatedAnnotation
@@ -894,9 +912,18 @@ class NaxaLibreAnnotationsManager: NSObject {
             // Index of the annotation if already added i.e. for update
             let index = polygonAnnotations.firstIndex(where: { $0.id == updatedAnnotation.id })
             
-            // Update the list
+            // Update the list with the updated annotation that uses the EXISTING layer reference
             if let i = index, i < polygonAnnotations.count {
-                polygonAnnotations[i] = updatedAnnotation
+                // Create updated annotation with existing layer to maintain proper reference
+                let updatedWithExistingLayer = NaxaLibreAnnotationsManager.Annotation(
+                    id: updatedAnnotation.id,
+                    type: updatedAnnotation.type,
+                    layer: layer, // Use the existing layer, not the new one
+                    geometry: updatedAnnotation.geometry,
+                    data: updatedAnnotation.data,
+                    draggable: updatedAnnotation.draggable
+                )
+                polygonAnnotations[i] = updatedWithExistingLayer
             }
             
             return updatedAnnotation
@@ -1060,9 +1087,18 @@ class NaxaLibreAnnotationsManager: NSObject {
             // Index of the annotation if already added i.e. for update
             let index = symbolAnnotations.firstIndex(where: { $0.id == updatedAnnotation.id })
             
-            // Update the list
+            // Update the list with the updated annotation that uses the EXISTING layer reference
             if let i = index, i < symbolAnnotations.count {
-                symbolAnnotations[i] = updatedAnnotation
+                // Create updated annotation with existing layer to maintain proper reference
+                let updatedWithExistingLayer = NaxaLibreAnnotationsManager.Annotation(
+                    id: updatedAnnotation.id,
+                    type: updatedAnnotation.type,
+                    layer: layer, // Use the existing layer, not the new one
+                    geometry: updatedAnnotation.geometry,
+                    data: updatedAnnotation.data,
+                    draggable: updatedAnnotation.draggable
+                )
+                symbolAnnotations[i] = updatedWithExistingLayer
             }
             
             return updatedAnnotation
