@@ -52,7 +52,12 @@ class NaxaLibreController: NSObject, NaxaLibreHostApi {
     }
     
     func fromScreenLocation(point: [Double]) throws -> [Double] {
-        let cgPoint = CGPoint(x: CGFloat(point[0]), y: CGFloat(point[1]))
+        let pixelRatio = UIScreen.main.scale
+        // Convert logical pixels to physical pixels before projection conversion
+        let cgPoint = CGPoint(
+            x: CGFloat(point[0]) * pixelRatio,
+            y: CGFloat(point[1]) * pixelRatio
+        )
         let coordinate = libreView.mapProjection().convert(cgPoint)
         return [coordinate.longitude, coordinate.latitude]
     }
@@ -102,7 +107,9 @@ class NaxaLibreController: NSObject, NaxaLibreHostApi {
     func toScreenLocation(latLng: [Double]) throws -> [Double] {
         let coordinate = CLLocationCoordinate2D(latitude: latLng[0], longitude: latLng[1])
         let point = libreView.mapProjection().convert(coordinate)
-        return [Double(point.x), Double(point.y)]
+        let pixelRatio = UIScreen.main.scale
+        // Convert physical pixels to logical pixels to match iOS/Flutter behavior
+        return [Double(point.x) / Double(pixelRatio), Double(point.y) / Double(pixelRatio)]
     }
     
     func toScreenLocations(listOfLatLng: [[Double]], completion: @escaping (Result<[[Any?]], any Error>) -> Void) {
